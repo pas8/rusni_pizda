@@ -15,6 +15,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
     }
 
     #video-container {
@@ -28,6 +29,7 @@
     #video-container iframe {
       width: 100%;
       height: 100%;
+      pointer-events: none;
     }
 
     .overlay {
@@ -54,20 +56,49 @@
 </head>
 <body>
   <div id="video-container">
-    <iframe id="ytplayer"
-      src="https://www.youtube.com/embed/DeCbsrxoNog?autoplay=1&mute=1&loop=1&playlist=DeCbsrxoNog"
-      frameborder="0"
-      allow="autoplay; encrypted-media"
-      allowfullscreen>
-    </iframe>
+    <div id="player"></div>
   </div>
 
   <div class="overlay"></div>
 
   <div class="text-row">
-    русні - пізда & nbsp; русні - пізда &nbsp; русні - пізда &nbsp; русні - пізда &nbsp; русні - пізда &nbsp; русні - пізда
+    русні - пізда &nbsp; русні - пізда &nbsp; русні - пізда &nbsp; русні - пізда &nbsp; русні - пізда
   </div>
+
+  <script>
+    // Load YouTube IFrame API
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(tag);
+
+    let player;
+
+    // Create the player
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        videoId: 'DeCbsrxoNog',
+        playerVars: {
+          autoplay: 1,
+          controls: 0,
+          loop: 1,
+          mute: 1,
+          playlist: 'DeCbsrxoNog',
+          modestbranding: 1,
+          showinfo: 0
+        },
+        events: {
+          onReady: onPlayerReady
+        }
+      });
+    }
+
+    function onPlayerReady() {
+      player.playVideo();
+      document.addEventListener('click', () => {
+        player.unMute();
+        player.playVideo();
+      });
+    }
+  </script>
 </body>
-
-
 </html>
